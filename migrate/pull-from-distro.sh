@@ -49,7 +49,12 @@ wslx du -sh "${existing[@]}" </dev/null | sed 's/^/    /'
 [ "$dry" = 1 ] && { ok "dry run, nothing copied"; exit 0; }
 
 ex=(); for e in "${excludes[@]}"; do ex+=("--exclude=$e"); done
-keep=(--skip-old-files); [ "$overwrite" = 1 ] && keep=(--unlink-first)   # also replaces read-only files (git objects)
+keep=(--skip-old-files)
+if [ "$overwrite" = 1 ]; then
+  keep=(--overwrite)
+  # --overwrite can't open read-only files (git objects); tar -p restores the modes after.
+  for p in "${existing[@]}"; do [ -e "$HOME/$p" ] && chmod -R u+w "$HOME/$p"; done
+fi
 
 wslx tar -cf - "${ex[@]}" -- "${existing[@]}" </dev/null \
   | tar -C "$HOME" -xpf - "${keep[@]}"
