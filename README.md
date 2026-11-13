@@ -28,7 +28,7 @@ Then, from PowerShell, `wsl --terminate Ubuntu-26.04` once so the `/etc/wsl.conf
 
 | Step | Script | What |
 |---|---|---|
-| `wsl-conf` | `steps/10-wsl-conf.sh` | `/etc/wsl.conf`: systemd on, default user, Windows interop + PATH |
+| `wsl-conf` | `steps/10-wsl-conf.sh` | `/etc/wsl.conf`: systemd on, default user, Windows interop + PATH; keeps `systemd-binfmt` off under WSL (see Troubleshooting) |
 | `apt` | `steps/20-apt.sh` | full upgrade, `config/apt-packages.txt`, GitHub CLI from cli.github.com |
 | `apt-optional` | `steps/20-apt.sh optional` | `config/apt-packages-optional.txt` (only when asked) |
 | `tools` | `steps/30-tools.sh` | pinned binaries into `~/.local/bin`, checksum-verified (see below) |
@@ -91,8 +91,10 @@ See [docs/MIGRATION.md](docs/MIGRATION.md) for the full runbook.
 ## Troubleshooting
 
 **`wsl.exe`/`code`/`explorer.exe` fail with "Exec format error"**: Windows interop's
-binfmt_misc entry was dropped. All distros share one VM, so a systemd distro shutting down
-can remove the entry for every distro. Restore it with:
+binfmt_misc entry was dropped. All distros share one VM; in a distro where `systemd-binfmt`
+runs (the stock Ubuntu 26.04 WSL image), stopping that distro removes the entry for every
+distro. The `wsl-conf` step adds the `ConditionVirtualization=!wsl` guard Ubuntu 24.04 ships.
+Restore the entry with:
 
 ```bash
 sudo sh -c 'echo ":WSLInterop:M::MZ::/init:P" > /proc/sys/fs/binfmt_misc/register'
