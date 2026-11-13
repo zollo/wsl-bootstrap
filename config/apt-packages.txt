@@ -1,0 +1,23 @@
+# One package per line; comments allowed. Installed by steps/20-apt.sh.
+# Base
+ca-certificates
+curl
+wget
+gnupg
+unzip
+zip
+git
+make
+less
+bash-completion
+openssh-client
+# Network / DNS troubleshooting
+bind9-dnsutils
+iputils-ping
+netcat-openbsd
+# JSON / scripting
+jq
+python3
+shellcheck
+# Packer cd_files (Windows unattend ISOs)
+xorriso

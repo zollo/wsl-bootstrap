@@ -1,0 +1,9 @@
+# tar --exclude patterns (one per line), always applied.
+# A saved Bitwarden session key unlocks the whole vault: never copy it.
+.config/bw/session
+# Caches that rebuild themselves
+.kube/cache
+.claude/cache
+.claude/shell-snapshots
+.claude/session-env
+.terraform.d/plugin-cache

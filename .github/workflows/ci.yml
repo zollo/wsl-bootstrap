@@ -1,0 +1,34 @@
+name: ci
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          shellcheck --version
+          shellcheck -x bootstrap.sh steps/*.sh migrate/*.sh lib/common.sh dotfiles/bashrc.d/*.sh
+
+  bootstrap:
+    # Non-WSL run of everything except wsl-conf/claude, in a stock Ubuntu 26.04 container.
+    runs-on: ubuntu-24.04
+    container: ubuntu:26.04
+    steps:
+      - name: prepare user with sudo
+        run: |
+          apt-get update -q && apt-get install -y -q sudo git ca-certificates
+          useradd -m -s /bin/bash ci
+          echo 'ci ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ci
+      - uses: actions/checkout@v4
+      - name: bootstrap (twice, to check idempotency)
+        run: |
+          cp -r "$GITHUB_WORKSPACE" /home/ci/wsl-bootstrap && chown -R ci: /home/ci/wsl-bootstrap
+          sudo -iu ci bash -c 'cd ~/wsl-bootstrap && ./bootstrap.sh apt tools dotfiles git check'
+          sudo -iu ci bash -c 'cd ~/wsl-bootstrap && ./bootstrap.sh tools' | tee second.log
+          test "$(grep -c 'already installed' second.log)" -eq 7

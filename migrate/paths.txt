@@ -1,0 +1,19 @@
+# Paths (relative to $HOME) copied by migrate/pull-from-distro.sh. Missing ones
+# are skipped. Add machine-specific paths (project dirs etc.) to
+# migrate/paths.local.txt (gitignored); both files are read.
+#
+# Credentials and identity
+.ssh
+.gitconfig
+.config/gh
+.config/Bitwarden CLI
+.kube
+# Tool state / config
+.config/helm
+.config/packer
+.terraform.d
+# Claude Code: settings, project memory, history, login
+.claude
+.claude.json
+# Shell history
+.bash_history

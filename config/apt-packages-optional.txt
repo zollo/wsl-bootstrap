@@ -1,0 +1,2 @@
+# Opt-in extras: ./bootstrap.sh apt-optional   (or OPTIONAL_APT=1 ./bootstrap.sh)
+openjdk-25-jre-headless
