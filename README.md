@@ -83,7 +83,7 @@ migrate/pull-from-distro.sh Ubuntu-24.04
 - `migrate/paths.txt`: the default set (SSH keys, gh/Bitwarden/kube/helm/packer config,
   Claude Code state, shell history).
 - `migrate/paths.local.txt` (gitignored): add your project directories here.
-- `migrate/excludes.txt`: always skipped. That includes `~/.config/bw/session`, because a
+- `migrate/excludes.txt` (+ gitignored `migrate/excludes.local.txt`): always skipped. That includes `~/.config/bw/session`, because a
   saved Bitwarden session key unlocks the whole vault.
 
 See [docs/MIGRATION.md](docs/MIGRATION.md) for the full runbook.

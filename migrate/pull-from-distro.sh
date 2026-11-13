@@ -5,7 +5,8 @@
 #
 #   migrate/pull-from-distro.sh <source-distro> [--dry-run] [--overwrite] [path...]
 #
-# Without paths: migrate/paths.txt + migrate/paths.local.txt.
+# Without paths: migrate/paths.txt + migrate/paths.local.txt. Excludes:
+# migrate/excludes.txt + migrate/excludes.local.txt.
 # Existing files here are kept unless --overwrite.
 set -euo pipefail
 . "$(dirname "$0")/../lib/common.sh"
@@ -28,7 +29,7 @@ readlist() { [ -f "$1" ] && sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^$/d' "
 if [ ${#paths[@]} -eq 0 ]; then
   mapfile -t paths < <(readlist "$REPO_DIR/migrate/paths.txt"; readlist "$REPO_DIR/migrate/paths.local.txt")
 fi
-mapfile -t excludes < <(readlist "$REPO_DIR/migrate/excludes.txt")
+mapfile -t excludes < <(readlist "$REPO_DIR/migrate/excludes.txt"; readlist "$REPO_DIR/migrate/excludes.local.txt")
 
 # wsl.exe needs a Windows-reachable cwd, or it warns about path translation.
 wslx() { (cd /mnt/c && wsl.exe -d "$src" --cd "~" -- "$@"); }

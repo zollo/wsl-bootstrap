@@ -1,4 +1,5 @@
-# tar --exclude patterns (one per line), always applied.
+# tar --exclude patterns (one per line), always applied. Add your own in
+# migrate/excludes.local.txt (gitignored).
 # A saved Bitwarden session key unlocks the whole vault: never copy it.
 .config/bw/session
 # Caches that rebuild themselves
