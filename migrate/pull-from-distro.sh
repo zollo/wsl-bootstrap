@@ -49,7 +49,7 @@ wslx du -sh "${existing[@]}" </dev/null | sed 's/^/    /'
 [ "$dry" = 1 ] && { ok "dry run, nothing copied"; exit 0; }
 
 ex=(); for e in "${excludes[@]}"; do ex+=("--exclude=$e"); done
-keep=(--skip-old-files); [ "$overwrite" = 1 ] && keep=(--overwrite)
+keep=(--skip-old-files); [ "$overwrite" = 1 ] && keep=(--unlink-first)   # also replaces read-only files (git objects)
 
 wslx tar -cf - "${ex[@]}" -- "${existing[@]}" </dev/null \
   | tar -C "$HOME" -xpf - "${keep[@]}"
