@@ -32,9 +32,10 @@ fi
 mapfile -t excludes < <(readlist "$REPO_DIR/migrate/excludes.txt"; readlist "$REPO_DIR/migrate/excludes.local.txt")
 
 # wsl.exe needs a Windows-reachable cwd, or it warns about path translation.
+# wsl.exe reads stdin even when the command does not: callers redirect it.
 wslx() { (cd /mnt/c && wsl.exe -d "$src" --cd "~" -- "$@"); }
 
-wslx true || die "can't start distro '$src' (wsl.exe -l -v to list)"
+wslx true </dev/null || die "can't start distro '$src' (wsl.exe -l -v to list)"
 
 # Keep only paths that exist in the source.
 existing=()
