@@ -21,7 +21,7 @@ else
   ok "systemd-binfmt guard in place"
 fi
 
-want="$(sed "s/__USER__/$(id -un)/" "$REPO_DIR/config/wsl.conf")"
+want="$(sed "s/^default=__USER__$/default=$(id -un)/" "$REPO_DIR/config/wsl.conf")"
 if [ -f /etc/wsl.conf ] && [ "$(cat /etc/wsl.conf)" = "$want" ]; then
   ok "/etc/wsl.conf up to date"
   exit 0
