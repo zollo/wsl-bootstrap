@@ -1,0 +1,7 @@
+[Unit]
+Description=Re-register WSL interop binfmt entry if missing
+ConditionPathIsMountPoint=/proc/sys/fs/binfmt_misc
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/wsl-interop-heal
